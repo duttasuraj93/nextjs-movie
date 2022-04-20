@@ -1,7 +1,8 @@
 import React from 'react'
+import styles from '../../styles/Movies.module.css'
 
-export default function Posts() {
+export default function Movies() {
   return (
-    <div>Posts</div>
+    <div className={styles.container}>Movies</div>
   )
 }
