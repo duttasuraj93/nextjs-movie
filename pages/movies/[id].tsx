@@ -14,44 +14,51 @@ interface Movie {
     }
 }
 
-const Post: React.FC<Movie> = ({ data }) => {
+const Post: React.FC<Movie> = ({ movie }) => {
 
-    const [movie, setMovie] = useState(data)
+    // const [movie, setMovie] = useState(data)
 
-    console.log(data);
+    // console.log(data);
     const router = useRouter()
     const { id } = router.query
     return (
-        <div>Post: {id}
+        <div>
+            <div>Post: {id}</div>
             <div>name: {movie.original_title}</div>
         </div>
     )
 }
 
-type Props = {
-    post: PostData
- }
- 
  interface Params extends ParsedUrlQuery {
     id: string,
  }
 
- export const getStaticPaths: GetStaticPaths = async () => {
-
-    return {
-        paths: [], //indicates that no page needs be created at build time
-        fallback: 'blocking' //indicates the type of fallback
-    }
-}
- 
- export const getStaticProps: GetStaticProps<Movie, Params> = async (context) => {
-    const params = context.params!       // ! is a non-null assertion 
+ export const getServerSideProps: GetServerSideProps<Movie, Params> = async (context) => {
+    // ...
+        const params = context.params!       // ! is a non-null assertion 
     const res = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=348dcf1948c61f6be83ca1d5a90f3ffe&language=en-US`)
-    const data = await res.json()
+    const movie = await res.json()
     return {
-       props: { data }
+       props: { movie }
     }
- }
+  }
+
+//  export const getStaticPaths: GetStaticPaths = async () => {
+
+//     return {
+//         paths: [], //indicates that no page needs be created at build time
+//         fallback: 'blocking' //indicates the type of fallback
+//     }
+// }
+ 
+//  export const getStaticProps: GetStaticProps<Movie, Params> = async (context) => {
+//     const params = context.params!       // ! is a non-null assertion 
+//     const res = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?api_key=348dcf1948c61f6be83ca1d5a90f3ffe&language=en-US`)
+//     const data = await res.json()
+//     return {
+//        props: { data }
+//     }
+//  }
 
 
 
